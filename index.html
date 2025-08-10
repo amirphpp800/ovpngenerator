@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>Nigeria NoiD - OpenVPN Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0f14">
+    <link rel="icon" type="image/png" href="ovpnlogo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --bg-2: #0e131a;
+      --surface: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #e6e6e6;
+      --muted: #a7b0ba;
+      --accent: #ff9500; /* iOS system orange */
+      --accent-strong: #ffb347; /* lighter orange for gradient end and highlights */
+      --accent-secondary: #ff9500; /* keep for legacy references */
+      --input-bg: #0d1116;
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+    }
+
+    body {
+      font-family: 'Vazirmatn', 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Tahoma, sans-serif;
+      background:
+        radial-gradient(1100px 520px at -10% -10%, rgba(255, 149, 0, 0.06), transparent 60%),
+        radial-gradient(900px 500px at 120% 110%, rgba(255, 179, 71, 0.05), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+      color: var(--text);
+      margin: 0;
+      padding: 24px 16px 96px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: var(--surface);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 20px;
+      padding: 28px;
+      width: 92%;
+      max-width: 520px;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      position: relative;
+    }
+    .container:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 40px rgba(0,0,0,.55);
+      border-color: rgba(255,255,255,0.12);
+    }
+    .container::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.06),
+        0 0 40px rgba(255, 149, 0, 0.06),
+        0 0 48px rgba(255, 179, 71, 0.05);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      font-size: 1.65em;
+      color: var(--accent);
+      letter-spacing: 0.2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .title-icon svg { width: 24px; height: 24px; fill: var(--accent); }
+
+    .logo {
+      width: 72px;
+      height: 72px;
+      display: block;
+      margin: 4px auto 10px;
+      filter: drop-shadow(0 10px 24px rgba(0,0,0,.45));
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+      color: var(--muted);
+    }
+
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      margin-top: 8px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--input-bg);
+      color: var(--text);
+      font-size: 1em;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease, transform .08s ease;
+      appearance: none;
+    }
+    select:focus {
+      border-color: rgba(255, 149, 0, 0.75);
+      box-shadow:
+        0 0 0 6px rgba(255, 149, 0, 0.12),
+        0 0 0 9px rgba(255, 179, 71, 0.12);
+      transform: translateY(-1px);
+    }
+    select option {
+      background: var(--input-bg);
+      color: var(--text);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px 14px;
+      margin-top: 26px;
+      border: 0;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+      color: #04110f;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .08s ease, box-shadow .2s ease, filter .2s ease;
+      box-shadow:
+        0 10px 30px rgba(255, 149, 0, 0.18),
+        0 8px 26px rgba(255, 179, 71, 0.20),
+        inset 0 0 0 1px rgba(255,255,255,0.22);
+    }
+    .btn-content { display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
+    .btn-content .icon { width: 20px; height: 20px; fill: #2b1100; }
+
+    button:hover {
+      filter: saturate(1.06) brightness(1.03);
+      box-shadow:
+        0 12px 36px rgba(255, 149, 0, 0.24),
+        0 10px 32px rgba(255, 179, 71, 0.24);
+      transform: translateY(-1px);
+    }
+    button:active {
+      transform: translateY(0);
+      box-shadow:
+        0 8px 22px rgba(255, 149, 0, 0.20),
+        0 8px 22px rgba(255, 179, 71, 0.20);
+    }
+    button:focus-visible {
+      outline: none;
+      box-shadow:
+        0 0 0 6px rgba(255, 149, 0, 0.14),
+        0 0 0 10px rgba(255, 179, 71, 0.12),
+        0 10px 30px rgba(255, 149, 0, 0.22);
+    }
+
+    .telegram {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .label-with-icon { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--muted); margin-bottom: 10px; }
+    .label-with-icon .icon { width: 18px; height: 18px; fill: var(--accent); }
+
+    .telegram a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      transition: border-color .2s ease, box-shadow .2s ease, transform .08s ease, background .2s ease;
+    }
+
+    .telegram a:hover {
+      border-color: rgba(255, 149, 0, 0.65);
+      box-shadow:
+        0 8px 24px rgba(255, 149, 0, 0.16),
+        0 8px 24px rgba(255, 179, 71, 0.16);
+      transform: translateY(-1px);
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .telegram svg {
+      width: 22px;
+      height: 22px;
+      margin-left: 8px;
+      fill: var(--accent);
+    }
+
+    footer.footer {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      backdrop-filter: blur(10px);
+      color: var(--muted);
+      font-size: 0.92em;
+      box-shadow: var(--shadow);
+    }
+    .footer .dot {
+      opacity: 0.55;
+    }
+    .footer-link {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color .2s ease, text-shadow .2s ease;
+    }
+    .footer-link:hover {
+      color: var(--accent);
+      text-shadow: 0 0 12px rgba(255, 149, 0, 0.32);
+    }
+
+    @media (max-width: 500px) {
+      h2 {
+        font-size: 1.3em;
+      }
+
+      select, button {
+        font-size: 0.95em;
+      }
+      .logo { width: 60px; height: 60px; margin: 2px auto 8px; }
+    }
+
+    @media (max-width: 360px) {
+      .container { padding: 22px; border-radius: 16px; }
+      body { padding-bottom: 112px; }
+      footer.footer { font-size: 0.88em; padding: 7px 12px; bottom: 12px; }
+    }
+
+    @media (max-height: 600px) and (max-width: 500px) {
+      body { padding-bottom: 120px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="ovpnlogo.png" alt="OpenVPN Logo" class="logo" loading="lazy">
+    <h2>
+      <span class="title-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17 9h-1V7a4 4 0 10-8 0v2H7a2 2 0 00-2 2v7a2 2 0 002 2h10a2 2 0 002-2v-7a2 2 0 00-2-2zm-6 0V7a2 2 0 114 0v2h-4z"/>
+        </svg>
+      </span>
+      <span>Nigeria NoiD - OpenVPN Generator</span>
+    </h2>
+
+    <label for="ip">انتخاب سرور:</label>
+    <select id="ip">
+      <option>98.98.197.200</option>
+      <option>98.98.197.199</option>
+      <option>98.98.197.169</option>
+      <option>98.98.197.163</option>
+      <option>98.98.197.216</option>
+      <option>98.98.197.197</option>
+      <option>98.98.197.213</option>
+      <option>98.98.197.194</option>
+      <option>98.98.197.217</option>
+      <option>98.98.197.214</option>
+      <option>98.98.197.166</option>
+      <option>98.98.197.162</option>
+      <option>98.98.197.196</option>
+      <option>98.98.197.164</option>
+      <option>98.98.197.180</option>
+      <option>98.98.197.167</option>
+      <option>98.98.197.195</option>
+      <option>98.98.197.212</option>
+      <option>98.98.197.178</option>
+      <option>98.98.197.211</option>
+    </select>
+
+    <label for="dns">انتخاب DNS:</label>
+    <select id="dns">
+      <option value="8.8.8.8 8.8.4.4">Google</option>
+      <option value="1.1.1.1 1.0.0.1">Cloudflare</option>
+      <option value="9.9.9.9 149.112.112.112">Quad9</option>
+      <option value="94.140.14.14 94.140.15.15">AdGuard</option>
+      <option value="208.67.222.222 208.67.220.220">OpenDNS</option>
+    </select>
+
+    <label for="cipher">انتخاب Cipher:</label>
+    <select id="cipher">
+      <option>AES-256-CBC</option>
+      <option>AES-128-CBC</option>
+      <option>AES-256-GCM</option>
+    </select>
+
+    <label for="verb">سطح Verb:</label>
+    <select id="verb">
+      <option>1</option>
+      <option>3</option>
+      <option>4</option>
+      <option selected>5</option>
+      <option>6</option>
+    </select>
+
+    <button onclick="generateConfig()">
+      <span class="btn-content">
+        <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 3a1 1 0 011 1v9.586l2.293-2.293a1 1 0 111.414 1.414l-4.001 4.001a1.25 1.25 0 01-1.412 0l-4.001-4.001a1 1 0 111.414-1.414L11 13.586V4a1 1 0 011-1zm-7 14a1 1 0 011-1h12a1 1 0 011 1v2.5A2.5 2.5 0 0116.5 22h-9A2.5 2.5 0 015 19.5V17z"/>
+        </svg>
+        <span>دانلود فایل OpenVPN</span>
+      </span>
+    </button>
+
+    <div class="telegram">
+      <p class="label-with-icon">
+        <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3 10.5l15-6a1 1 0 011.36 1.17l-1.86 7.44a2 2 0 01-1.12 1.35l-6.86 3.04a1 1 0 01-1.38-.92v-2.7L15 9l-7.08 2.23L3.9 11.8A1 1 0 013 10.5z"/>
+        </svg>
+        <span>کانال اصلی ما در تلگرام</span>
+      </p>
+      <a href="https://t.me/enzo_pubgm" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M9.743 15.13l-.39 4.324c.559 0 .802-.24 1.1-.53l2.64-2.49 5.474 4.005c1.005.553 1.72.263 2.002-.93l3.63-16.676.001-.001c.316-1.47-.524-2.04-1.495-1.685L.763 9.475c-1.453.57-1.43 1.38-.248 1.748l5.857 1.83 13.594-8.56c.64-.42 1.22-.187.74.235L9.743 15.13z"/></svg>
+        @enzo_pubgm
+      </a>
+    </div>
+
+    <div class="telegram">
+      <p class="label-with-icon">
+        <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3 10.5l15-6a1 1 0 011.36 1.17l-1.86 7.44a2 2 0 01-1.12 1.35l-6.86 3.04a1 1 0 01-1.38-.92v-2.7L15 9l-7.08 2.23L3.9 11.8A1 1 0 013 10.5z"/>
+        </svg>
+        <span>کانال توسعه دهنده</span>
+      </p>
+      <a href="https://t.me/NoiDUsers" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M9.743 15.13l-.39 4.324c.559 0 .802-.24 1.1-.53l2.64-2.49 5.474 4.005c1.005.553 1.72.263 2.002-.93l3.63-16.676.001-.001c.316-1.47-.524-2.04-1.495-1.685L.763 9.475c-1.453.57-1.43 1.38-.248 1.748l5.857 1.83 13.594-8.56c.64-.42 1.22-.187.74.235L9.743 15.13z"/></svg>
+        @NoiDUsers
+      </a>
+    </div>
+  </div>
+
+  <footer class="footer" dir="rtl">
+    <a class="footer-link" href="https://t.me/NoiDUsers" target="_blank">@NoiDUsers</a>
+    <span class="dot">•</span>
+    <a class="footer-link" href="https://t.me/enzo_pubgm" target="_blank">@enzo_pubgm</a>
+  </footer>
+
+  <script>
+    function generateConfig() {
+      const ip = document.getElementById('ip').value;
+      const dns = document.getElementById('dns').value.split(' ');
+      const cipher = document.getElementById('cipher').value;
+      const verb = document.getElementById('verb').value;
+
+      const config = `
+client
+remote ${ip} 443
+dev tun0
+proto udp
+nobind
+remote-cert-tls server
+persist-key
+persist-tun
+reneg-sec 0
+dhcp-option DNS ${dns[0]}
+dhcp-option DNS ${dns[1]}
+redirect-gateway
+verb ${verb}
+auth-user-pass
+<auth-user-pass>
+yivota1555@elobits.com
+NoiDPlatform
+</auth-user-pass>
+data-ciphers ${cipher}
+auth SHA256
+<ca>
+-----BEGIN CERTIFICATE-----
+MIICPTCCAcOgAwIBAgIQfs/kxYEHK0ojKgXA1FrgFjAKBggqhkjOPQQDAjBgMQsw
+CQYDVQQGEwJDQTEUMBIGA1UECgwLTWNBZmVlLCBMTEMxDDAKBgNVBAsMA1ZQTjEt
+MCsGA1UEAwwkTWNBZmVlIE9wZW5WUE4gQ2VydGlmaWNhdGUgQXV0aG9yaXR5MB4X
+DTI0MDgwNjIwMzM0N1oXDTM0MDgwNjIxMzI0N1owYDELMAkGA1UEBhMCQ0ExFDAS
+BgNVBAoMC01jQWZlZSwgTExDMQwwCgYDVQQLDANWUE4xLTArBgNVBAMMJE1jQWZl
+ZSBPcGVuVlBOIENlcnRpZmljYXRlIEF1dGhvcml0eTB2MBAGByqGSM49AgEGBSuB
+BAAiA2IABNJps+fTiqQfpGzgpq9yAPM0rLzVZ1qscVxqag3ESsclEp/uk+HCAwK1
+EiLER8xXXweW9jVcYEHLuUkmBL+0FjocD5lI6zbrwaY8gWOz8vAP0fjolhXQgHfH
+TqrYC9unIqNCMEAwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUwa+4wbD5vocC
+xKeVNouzvsSPLekwDgYDVR0PAQH/BAQDAgGGMAoGCCqGSM49BAMCA2gAMGUCMGIM
+dRbutNNzP8GIyGHKtPd+7CSOlpqeBOUBsGLkj4F1y7/yqv7hIchtTIZQymmthAIx
+APY7ZiCKYW7L0mLVgowDRSY95Qxrs9NjsyQxlqRdMKcQfrojIH8Dh931M5Sj7EqR
+eg==
+-----END CERTIFICATE-----
+</ca>
+      `.trim();
+
+      const blob = new Blob([config], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Nigeria🇳🇬NoiD.ovpn`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
